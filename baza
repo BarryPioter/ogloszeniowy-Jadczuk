@@ -1,0 +1,68 @@
+-- ---
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
+-- Table 'uzytkownicy'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `uzytkownicy`;
+		
+CREATE TABLE `uzytkownicy` (
+  `id_user` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `nazwa` VARCHAR(20) NULL DEFAULT NULL,
+  `imie` VARCHAR(15) NULL DEFAULT NULL,
+  `nazwisko` VARCHAR(35) NULL DEFAULT NULL,
+  `haslo` VARCHAR(25) NULL DEFAULT NULL,
+  `email` VARCHAR(40) NULL DEFAULT NULL,
+  `telefon` INTEGER(9) NULL DEFAULT NULL,
+  PRIMARY KEY (`id_user`)
+);
+
+-- ---
+-- Table 'ogloszenia'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `ogloszenia`;
+		
+CREATE TABLE `ogloszenia` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `id_user` INTEGER NULL DEFAULT NULL,
+  `id_kate` INTEGER NULL DEFAULT NULL,
+  `item` VARCHAR(50) NULL DEFAULT NULL,
+  `opis` MEDIUMTEXT(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'kategorie'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `kategorie`;
+		
+CREATE TABLE `kategorie` (
+  `id_kategorii` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `kategoria` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`id_kategorii`)
+);
+
+-- ---
+-- Foreign Keys 
+-- ---
+
+ALTER TABLE `ogloszenia` ADD FOREIGN KEY (id_user) REFERENCES `uzytkownicy` (`id_user`);
+ALTER TABLE `ogloszenia` ADD FOREIGN KEY (id_kate) REFERENCES `kategorie` (`id_kategorii`);
+
+-- ---
+-- Table Properties
+-- ---
+
+-- ALTER TABLE `uzytkownicy` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `ogloszenia` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `kategorie` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
