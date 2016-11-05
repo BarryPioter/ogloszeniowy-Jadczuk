@@ -1,1 +1,0 @@
-# ogloszeniowy-Jadczuk
