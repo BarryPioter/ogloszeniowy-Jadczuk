@@ -36,3 +36,4 @@ CREATE TABLE IF NOT EXISTS `uzytkownicy` (
   `telefon` int(9) NOT NULL,
   PRIMARY KEY (`id_user`)
 )ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
