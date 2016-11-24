@@ -1,11 +1,11 @@
 <?php
-$servername = "host";
-$username = "user";
-$password = "haslo";
-$dbname = "baza";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "serwis";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Błąd polączenia");
 } 
 ?>
