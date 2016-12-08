@@ -1,108 +1,117 @@
 <?php
-session_start();
-include_once 'dbconnect.php';
-
-
-
-
+ ob_start();
+ session_start();
+ require_once 'dbconnect.php'; 
+ require_once 'check.php';  
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="styleshee.css"/>
-	
-	
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-  body {
-background-color: #1E88E5;
-  }
-  #section1 {padding-top:50px;height:500px; width:400px;color: #fff; background-color: #1E88E5;}
-  </style>
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<meta http-equiv="Content-Type" content="text/html"/>
+<meta charset="UTF-8">
+<title>Barry's Announcements</title>
+<style>
+#section1 {padding-top:10px; width:400px;
+</style>
 </head>
 <body>
-
+<div id="wrapper">
 <nav class="navbar navbar-default navbar-static-top">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="index.php">Barry's Announcements</a>
+      <a href="index.php"><img src="img/logo.png" height="42" width="42"></a>
     </div>
-      <form class="navbar-form navbar-left">
+      <form action="szukaj.php" method="GET" class="navbar-form navbar-left">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Czego poszukujesz?">
+          <input type="text" name="szukaj" class="form-control" placeholder="Czego poszukujesz?">
         </div>
         <button type="submit" class="btn btn-default">Szukaj</button>
       </form>
+	   <?php 
+	  if ($_SESSION['nick']){
+	echo'<form action="dodaj.php" class="navbar-form navbar-left">';
+    echo'<button type="submit" class="btn btn-success">Dodaj</button>';
+      echo'</form>';
+		   }
+ ?>
       <ul class="nav navbar-nav navbar-right">
-		<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logowanie<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="login.php">Zaloguj</a></li>
-            <li><a href="rejestracja.html">Zarejestruj</a></li>
-          </ul>
-        </li></ul>
+		<?php 
+ if ($_SESSION['nick']){
+		 echo'<li><a href="#">Witaj, '.$_SESSION['nick'].'</a></li>';
+echo'<li class="dropdown">';
+          echo'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Konto<span class="caret"></span></a>';
+           echo'<ul class="dropdown-menu">';
+            echo'<li><a href="userpanel.php">Profil</a></li>';
+ if ($_SESSION['admin']){
+            echo'<li><a href="admin.php">Panel administratora</a></li>';
+ }
+ echo'<li><a href="logout.php">Wyloguj</a></li>';
+           echo'</ul>';
+         echo'</li>';
+
+}else{
+ echo'<li class="dropdown">';
+          echo'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Logowanie<span class="caret"></span></a>';
+           echo'<ul class="dropdown-menu">';
+            echo'<li><a href="login.php">Zaloguj</a></li>';
+            echo'<li><a href="register.php">Zarejestruj</a></li>';
+           echo'</ul>';
+         echo'</li>';
+
+ }
+ ?></ul>
     </div>
-  </div>
-</nav>
+   </nav>
 <div id="section1" class="container-fluid">
-  <form role="form" method="post" action="new.php" enctype="multipart/form-data">
+
+<form action="upload.php" enctype="multipart/form-data" method="post">
   <div class="form-group">
     <label >Nazwa produktu</label>
-    <input type="text" class="form-control" id="nazwa" />
+    <input type="text" class="form-control" name="nazwa" />
   </div>
+  <label for="kat">Kategoria</label>
+  <select class="form-control" name="kat">
+  <?php  
+$wynik = mysqli_query($conn, "SELECT id_kategorii,kategoria  FROM kategorie") 
+or die('B&#322;&#261;d zapytania');
+while($r = mysqli_fetch_array($wynik)) {
+echo "<option value='".$r[0]."'>".$r[1]."</option>";
+}
+?> 
+	
+  </select>
   <div class="form-group">
-    <label>Typ</label>
-    <input type="text" class="form-control" id="typ" />
+    <label >Cena w z&#322;</label>
+    <input type="number" class="form-control" name="cena" />
   </div>
-    <div class="form-group">
-    <label>Producent</label>
-    <input type="text" class="form-control" id="producent"/>
-  </div>
-      <div class="form-group">
-    <label >Kolor</label>
-    <input type="text" class="form-control" id="kolor" />
-  </div>
-        <div class="form-group">
-    <label >Cena początkowa</label>
-    <input type="number" class="form-control" id="cena" />
-  </div>
-   <div class="form-group">
-  <label for="sel1">Czas trwania licytacji:</label>
-  <select class="form-control" id="kat">
-    <option>Dzień</option>
-    <option>Tydzień</option>
-    <option>Dwa Tygodznie</option>
-    <option>Miesiąc</option>
-  </select>
-
-</div>
-
  <div class="form-group">
-  <label for="sel1">Kategoria:</label>
-  <select class="form-control" id="kat">
-    <option>Motoryzacja</option>
-    <option>RTViAGD</option>
-    <option>Sport</option>
-    <option>Odzież</option>
-	<option>Umeblowanie</option>
-  </select>
-
-</div>
- <div class="form-group">
-  <label for="comment">Opis:</label>
-  <textarea class="form-control" rows="10" id="comment" name="comment"></textarea>
+  <label for="opis">Opis:</label>
+  <textarea class="form-control" rows="10" id="opis" name="opis"></textarea>
 </div>
   <div class="form-group">
-    <label>Zdjęcie przedmiotu</label>
-    <input type="file" id="fileToUpload" name="fileToUpload" />
+    <label>Zdj&#281;cie przedmiotu</label>
+<input id="file" name="file" type="file" />
 </div>
+<center>
   <button type="submit" class="btn btn-default" name="submit">Wyslij</button>
 </form>
 </div>
-
-
+</div>
+<div id="footer">
+<center>
+<div class="col-md-12">
+<h4>WiÄ™cej informacji</h4>
+<ul class="list-unstyled">
+<li><a href="help.php">FAQ</a></li>
+<li><a href="kontakt.php">Kontakt</a></li>
+</ul>
+<p >Â© 2016 Barry All Rights Reserved </p>
+</div>
+</div></div>
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
-</html>
+</html><?php ob_end_flush(); ?>

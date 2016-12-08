@@ -65,31 +65,64 @@ echo'<li class="dropdown">';
     </div>
    </nav>
 <div id="content" class="container-fluid">
+<div id='menu' class='col-lg-2 col-md-3 col-sm-6 col-xs-12' style="padding-top:70px;">
+<ul style="display: block;background-color:#e95420;color:white;border-radius:12px;">
+<?php 
+$kat = mysqli_query($conn, "SELECT id_kate FROM ogloszenia WHERE id=".$id)
+or die('B&#322;&#261;d zapytania 1');
+if(mysqli_num_rows($kat) == 0) {
+	$k = $kat -> fetch_row();
+}
+$menu = mysqli_query($conn, "SELECT id_kategorii,kategoria  FROM kategorie") 
+or die('B&#322;&#261;d zapytania 2'); 
+if(mysqli_num_rows($menu) > 0) {  
+    while($d = mysqli_fetch_array($menu)) {
+		if ($d[0]==$k[0])
+		{
+		echo "<li><a href='kategoria.php?id=".$d[0]."' style='color:gray;'>".$d[1]."</a></li>"; 
+		}
+	else{
+		echo "<li><a href='kategoria.php?id=".$d[0]."' style='color:white;'>".$d[1]."</a></li>"; 	
+	}
 
-<center>
-<h4>Barry's Announcements to darmowe og&#322;oszenia lokalne w kategoriach: Obuwie, Gry, Odzie&#380;, Samochody, Zwierz&#281;ta, Komputery. Szybko znajdziesz tu ciekawe og&#322;oszenia i &#322;atwo skontaktujesz si&#281; z og&#322;oszeniodawc&#261;. Je&#347;li chcesz co&#347; sprzeda&#263; - w prosty spos&#243;b dodasz bezp&#322;atne og&#322;oszenia. Chcesz co&#347; kupi&#263; - tutaj znajdziesz ciekawe okazje, taniej ni&#380; w sklepie.</h4><br>
-		<h1>Popularne kategorie</h1><br>
-<?php  
-$wynik = mysqli_query($conn, "SELECT id_kategorii,kategoria  FROM kategorie") 
-or die('B&#322;&#261;d zapytania'); 
-if(mysqli_num_rows($wynik) > 0) {  
-    while($r = mysqli_fetch_array($wynik)) {
-	echo "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'>"; 
-        echo "<div class='hovereffect'>"; 
-		echo "<img class='img-responsive' src='img/kat/".$r[0].".jpg'>";
-		echo "<div class='overlay'>";
-		echo "<p>";
-		echo '<h2><a href="kategoria.php?id='.$r[0].'">'.$r[1].'</a></h2>';
-		echo "</p>";
-		echo "</div>";
-		echo "</div>";
-		echo "</div>";
 }
 } 
-mysqli_close($conn); 
-?>		
-
+?>
+</ul>
 </div>
+<div class='col-lg-10 col-md-9 col-sm-6 col-xs-12'>
+<center>
+<?php
+$id =$_GET['id'];
+$przedmiot = mysqli_query($conn, "SELECT id,item,opis,cena,id_user,id_kate FROM ogloszenia WHERE id=".$id)
+or die('B&#322;&#261;d zapytania 3');
+if(mysqli_num_rows($przedmiot) > 0) {
+	$p = $przedmiot -> fetch_row();
+}
+$sprzedawca = mysqli_query($conn, "SELECT id_user,nazwa,imie,nazwisko,telefon FROM uzytkownicy WHERE id_user=".$p[4])
+or die('B&#322;&#261;d zapytania 4');
+if(mysqli_num_rows($sprzedawca) > 0) {
+	$s = $sprzedawca -> fetch_row();
+}
+      echo "<h1>".$p[1]."</h1>";
+echo "<img class='img-responsive' src='img/oglosz/".$p[0].".jpg' width='350px' height='350px'><br>";
+ if (isset($_SESSION['nick'])||isset($_SESSION['id'])) {
+echo "<h3><strong>Cena: ".$p[3]." z&#322;</strong></h3>";
+echo "<p>".$p[2]."</p>";
+echo "<h4><i>Sprzedaj&#261;cy: ".$s[2]." ".$s[3]."</i></h4>";
+echo "<h5 class='btn btn-warning'>Telefon: ".$s[4]."</h5><br><br>";
+echo"<a href='wiadomosc.php?id=".$s[0]."' class='btn btn-info'>";
+echo"<span class='glyphicon glyphicon-envelope'></span>  Napisz do sprzedawcy!</a>";
+}
+else {
+       echo '<h4 class="btn btn-warning">Nie jeste&#347; zalogowany. Nie zobaczysz szczegolow tego ogloszenia.</h4>';
+   }
+
+
+mysqli_close($conn); 
+ ?>
+
+</div></div>
 <div id="footer">
 <center>
 <div class="col-md-12">
