@@ -115,15 +115,6 @@ CREATE TABLE IF NOT EXISTS `uzytkownicy` (
   `admin` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_user`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=4 ;
-
---
--- Zrzut danych tabeli `uzytkownicy`
---
-
-INSERT INTO `uzytkownicy` (`id_user`, `nazwa`, `imie`, `nazwisko`, `haslo`, `email`, `telefon`, `hash`, `aktywny`, `admin`) VALUES
-(1, 'Barry Pioter', 'Piotr', 'Jadczuk', 'f3ce85cf048270d52e09ef5ed4eff86c', 'speedpower21@wp.pl', 678456123, 'b5b41fac0361d157d9673ecb926af5ae', 1, 1),
-(3, 'Peterszmit', 'Piotr', 'Jadczuk', 'f3ce85cf048270d52e09ef5ed4eff86c', 'masselite21@gmail.com', 723889715, '8d6dc35e506fc23349dd10ee68dabb64', 1, 0);
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
